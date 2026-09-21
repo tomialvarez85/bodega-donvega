@@ -1,26 +1,131 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
+
+/* Don Vega — design tokens */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-ink: #0e0d0c;
+  --color-cream: #f7f3ec;
+  --color-wine: #6e0f1f;
+  --color-gold: #b08d57;
+  --color-charcoal: #3a3632;
+  /* Tokens del diseño de referencia del Home */
+  --color-surface: #fffaf4; /* fondo de tarjetas */
+  --color-panel: #f0ebe1; /* panel de la botella */
+  --color-line: #c8bfa8; /* líneas y bordes del layout */
+  --color-stone: #8f8676; /* texto tenue sobre ink (AA: 5.4:1) */
+  --color-gold-deep: #8a6a36; /* dorado para texto sobre crema (AA: 4.5:1) */
+  /* Tokens del diseño de referencia del Catálogo (tono oscuro) */
+  --color-sand: #b09e8a; /* texto secundario sobre ink (AA: 7.5:1) */
+  --color-hairline: #2a2826; /* líneas finas sobre ink */
+  --color-hairline-mid: #3d3a36; /* bordes de controles sobre ink */
+
+  /* Sistema oscuro: fondo ink, texto crema. */
+  --background: var(--color-ink);
+  --foreground: var(--color-cream);
+  --card: #151413;
+  --card-foreground: var(--color-cream);
+  --popover: #151413;
+  --popover-foreground: var(--color-cream);
+  --primary: var(--color-cream);
+  --primary-foreground: var(--color-ink);
+  --secondary: var(--color-charcoal);
+  --secondary-foreground: var(--color-cream);
+  --muted: #1c1a18;
+  --muted-foreground: var(--color-sand);
+  --accent: var(--color-gold);
+  --accent-foreground: var(--color-ink);
+  --destructive: #e5484d;
+  --border: var(--color-hairline);
+  --input: var(--color-hairline-mid);
+  --ring: var(--color-gold);
+  --radius: 0px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-ink: var(--color-ink);
+  --color-cream: var(--color-cream);
+  --color-wine: var(--color-wine);
+  --color-gold: var(--color-gold);
+  --color-charcoal: var(--color-charcoal);
+  --color-surface: var(--color-surface);
+  --color-panel: var(--color-panel);
+  --color-line: var(--color-line);
+  --color-stone: var(--color-stone);
+  --color-gold-deep: var(--color-gold-deep);
+  --color-sand: var(--color-sand);
+  --color-hairline: var(--color-hairline);
+  --color-hairline-mid: var(--color-hairline-mid);
+
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-body);
+  --font-display: var(--font-display);
+  --font-heading: var(--font-display);
+  /* Cuerpo serif de la ficha de producto (Libre Baskerville, se carga solo en esa ruta). */
+  --font-serif-body: var(--font-baskerville), Georgia, serif;
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 2px;
+  --radius-2xl: 2px;
+  --radius-3xl: 2px;
+  --radius-4xl: 2px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  /* Foco de teclado visible y consistente (dorado: 6,3:1 sobre ink). */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--color-wine);
+    color: var(--color-cream);
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+    letter-spacing: 0.01em;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
