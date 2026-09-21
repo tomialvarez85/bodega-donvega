@@ -1,3 +1,4 @@
+import { User } from "lucide-react";
 import Link from "next/link";
 
 import { CartSheet } from "@/components/cart-sheet";
@@ -48,8 +49,18 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <CartTrigger />
+          {/* Acceso del administrador: /admin manda al login si no hay sesión. */}
+          <Link
+            href="/admin"
+            prefetch={false}
+            aria-label="Acceso administrador"
+            title="Acceso administrador"
+            className="flex h-10 w-10 items-center justify-center text-cream transition-colors hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          >
+            <User className="h-5 w-5" strokeWidth={1.5} />
+          </Link>
           <MobileNav links={NAV_LINKS} />
         </div>
       </div>
