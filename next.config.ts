@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      // Imágenes placeholder del seed.
+      // Vinos viejos de demo (seed anterior). Se puede quitar cuando ya no existan en la base.
       { protocol: "https", hostname: "picsum.photos" },
       // Imágenes subidas desde el admin (Vercel Blob, store público).
       { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
@@ -15,6 +15,22 @@ const nextConfig: NextConfig = {
       // multipart). Vercel corta en 4,5 MB de todas formas.
       bodySizeLimit: "5mb",
     },
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+        ],
+      },
+    ];
   },
 };
 

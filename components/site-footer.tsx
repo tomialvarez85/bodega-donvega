@@ -27,6 +27,7 @@ function InstagramIcon() {
 const FOOTER_LINKS = [
   { label: "Catálogo", href: "/catalogo" },
   { label: "Selección especial", href: "/promociones" },
+  { label: "Visitas y Catas", href: "/visitas" },
   { label: "Nosotros", href: "/#nosotros" },
   { label: "Contacto", href: "#contacto" },
 ];

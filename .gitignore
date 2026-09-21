@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# referencias de diseño exportadas (pesan ~10 MB, no van al deploy)
+/design-reference/

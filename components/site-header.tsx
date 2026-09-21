@@ -10,6 +10,7 @@ import { MobileNav } from "@/components/mobile-nav";
 const NAV_LINKS = [
   { label: "Catálogo", href: "/catalogo" },
   { label: "Selección especial", href: "/promociones" },
+  { label: "Visitas y Catas", href: "/visitas" },
   { label: "Nosotros", href: "/#nosotros" },
   { label: "Contacto", href: "#contacto" },
 ];
@@ -34,8 +35,8 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav aria-label="Principal" className="hidden md:block">
-          <ul className="flex gap-7 lg:gap-10">
+        <nav aria-label="Principal" className="hidden lg:block">
+          <ul className="flex gap-7 xl:gap-10">
             {NAV_LINKS.map((link) => (
               <li key={link.label}>
                 <Link

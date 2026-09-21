@@ -17,7 +17,7 @@ type MobileNavProps = {
   links: { label: string; href: string }[];
 };
 
-// Menú del header para pantallas < md, donde la navegación horizontal está oculta.
+// Menú del header para pantallas < lg, donde la navegación horizontal está oculta.
 export function MobileNav({ links }: MobileNavProps) {
   const [open, setOpen] = useState(false);
 
@@ -28,7 +28,7 @@ export function MobileNav({ links }: MobileNavProps) {
         onClick={() => setOpen(true)}
         aria-label="Abrir menú"
         aria-expanded={open}
-        className="flex h-10 w-10 items-center justify-center text-cream transition-colors hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold md:hidden"
+        className="flex h-10 w-10 items-center justify-center text-cream transition-colors hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold lg:hidden"
       >
         <Menu className="h-5 w-5" strokeWidth={1.5} />
       </button>

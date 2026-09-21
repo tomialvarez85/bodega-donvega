@@ -12,6 +12,7 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:seed": "tsx scripts/seed.ts",
+    "db:seed-experiences": "tsx scripts/seed-experiences.ts",
     "admin:hash": "tsx scripts/hash-password.ts",
     "db:seed-orders": "tsx scripts/seed-orders.ts"
   },
@@ -49,5 +50,8 @@
     "tailwindcss": "^4",
     "tsx": "^4.23.13",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=20.9.0"
   }
 }

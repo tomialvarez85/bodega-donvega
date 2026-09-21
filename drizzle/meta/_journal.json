@@ -57,6 +57,20 @@
       "when": 1789955295484,
       "tag": "0007_create_combo_items",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790003151938,
+      "tag": "0008_create_experiences",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790003161938,
+      "tag": "0009_create_visit_requests",
+      "breakpoints": true
     }
   ]
 }

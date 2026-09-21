@@ -15,6 +15,11 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { DELIVERY_METHODS, ORDER_STATUSES, type OrderStatus } from "./orders";
+import {
+  PRICE_UNITS,
+  VISIT_REQUEST_STATUSES,
+  type VisitRequestStatus,
+} from "./visits";
 
 // Premio o puntaje obtenido por un vino. `award` puede ser null (solo puntaje).
 export type Award = { points: number; award: string | null; contest: string };
@@ -177,3 +182,79 @@ export type NewOrder = typeof orders.$inferInsert;
 export type OrderItem = typeof orderItems.$inferSelect;
 export type NewOrderItem = typeof orderItems.$inferInsert;
 export type { OrderStatus };
+
+// Visitas guiadas y catas: los paquetes que ofrece la bodega.
+export const experiences = pgTable(
+  "experiences",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    name: text("name").notNull(),
+    slug: text("slug").notNull().unique(),
+    description: text("description").notNull().default(""),
+    // Duración aproximada.
+    durationMinutes: integer("duration_minutes").notNull(),
+    // Pesos argentinos; priceUnit aclara si es por persona o por grupo.
+    price: numeric("price", { precision: 12, scale: 2 }).notNull(),
+    priceUnit: text("price_unit", { enum: PRICE_UNITS })
+      .notNull()
+      .default("por persona"),
+    // Capacidad máxima del grupo; null = sin tope definido.
+    maxGroupSize: integer("max_group_size"),
+    imageUrl: text("image_url").notNull(),
+    active: boolean("active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    check("experiences_duration_positive", sql`${table.durationMinutes} > 0`),
+    check(
+      "experiences_max_group_size_positive",
+      sql`${table.maxGroupSize} IS NULL OR ${table.maxGroupSize} > 0`,
+    ),
+    check(
+      "experiences_price_unit_valid",
+      sql`${table.priceUnit} IN (${sql.raw(PRICE_UNITS.map((u) => `'${u}'`).join(", "))})`,
+    ),
+  ],
+);
+
+export type Experience = typeof experiences.$inferSelect;
+export type NewExperience = typeof experiences.$inferInsert;
+
+export const visitRequestStatus = pgEnum(
+  "visit_request_status",
+  VISIT_REQUEST_STATUSES,
+);
+
+// Solicitudes de visita o cata. No son reservas: la bodega coordina la fecha a mano.
+export const visitRequests = pgTable(
+  "visit_requests",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    // Se conserva el historial: un paquete con solicitudes no se puede borrar (desactivarlo sí).
+    experienceId: uuid("experience_id")
+      .notNull()
+      .references(() => experiences.id, { onDelete: "restrict" }),
+    customerName: text("customer_name").notNull(),
+    phone: text("phone").notNull(),
+    email: text("email").notNull(),
+    // Texto libre ("Sábado 15 de marzo", "primera quincena de abril"): no hay agenda calendarizada.
+    preferredDate: text("preferred_date").notNull(),
+    groupSize: integer("group_size").notNull(),
+    comments: text("comments"),
+    status: visitRequestStatus("status").notNull().default("pendiente"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    check("visit_requests_group_size_positive", sql`${table.groupSize} > 0`),
+    index("visit_requests_experience_id_idx").on(table.experienceId),
+    index("visit_requests_status_idx").on(table.status),
+  ],
+);
+
+export type VisitRequest = typeof visitRequests.$inferSelect;
+export type NewVisitRequest = typeof visitRequests.$inferInsert;
+export type { VisitRequestStatus };

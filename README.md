@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Don Vega
 
-## Getting Started
+Tienda online de la bodega Don Vega: catálogo de vinos, promociones y combos, carrito, checkout sin
+pasarela de pago (el pedido se guarda y se continúa por WhatsApp) y panel de administración.
 
-First, run the development server:
+## Stack
+
+Next.js 16 (App Router) · React 19 · Tailwind CSS v4 · Drizzle ORM + Postgres · Zustand ·
+Vercel Blob (imágenes cargadas desde el admin).
+
+## Desarrollo local
 
 ```bash
+npm install
+cp .env.example .env      # completá los valores (ver comentarios dentro del archivo)
+npm run db:migrate        # aplica las migraciones de drizzle/
+npm run db:seed           # opcional: carga los 5 vinos reales
+npm run admin:hash        # genera ADMIN_PASSWORD_HASH
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Sitio en <http://localhost:3000>, panel en <http://localhost:3000/admin>.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Script | Qué hace |
+| --- | --- |
+| `npm run dev` / `build` / `start` | Next.js |
+| `npm run lint` | ESLint |
+| `npm run db:generate` | Genera una migración nueva desde `lib/schema.ts` |
+| `npm run db:migrate` | Aplica las migraciones a `DATABASE_URL` |
+| `npm run db:seed` | Carga los vinos reales (`-- --update` actualiza existentes) |
+| `npm run db:seed-orders` | Pedidos de ejemplo. **Solo desarrollo** |
+| `npm run admin:hash` | Hash bcrypt para la contraseña del admin |
 
-## Learn More
+## Deploy
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Ver [DEPLOY.md](DEPLOY.md).

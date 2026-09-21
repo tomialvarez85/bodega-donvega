@@ -35,3 +35,22 @@ export function businessWhatsappUrl(message: string): string | null {
   if (number.length < 10) return null;
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }
+
+// Teléfono de un contacto de la bodega (visitas): puede ser de cualquier país. Primero se prueba
+// como argentino; si no cuadra, se acepta solo si viene con "+" o "00" (código de país explícito).
+export function normalizeContactPhone(phone: string): string | null {
+  const argentine = normalizeArPhone(phone);
+  if (argentine) return argentine;
+
+  const trimmed = phone.trim();
+  if (!trimmed.startsWith("+") && !trimmed.startsWith("00")) return null;
+  let digits = trimmed.replace(/\D/g, "");
+  if (digits.startsWith("00")) digits = digits.slice(2);
+  return digits.length >= 10 && digits.length <= 15 ? digits : null;
+}
+
+export function contactWhatsappUrl(phone: string, message: string): string | null {
+  const normalized = normalizeContactPhone(phone);
+  if (!normalized) return null;
+  return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
+}

@@ -93,6 +93,36 @@ export function TextArea({
   );
 }
 
+// Select nativo (accesible y con buen soporte móvil), con el mismo aspecto que los inputs.
+export function SelectInput({
+  id,
+  error,
+  register,
+  children,
+  ...props
+}: {
+  id: string;
+  error?: string;
+  register: UseFormRegisterReturn;
+  children: ReactNode;
+} & Omit<React.ComponentProps<"select">, "id" | "name" | "onChange" | "onBlur" | "ref">) {
+  return (
+    <select
+      id={id}
+      aria-invalid={Boolean(error)}
+      aria-describedby={error ? `${id}-error` : undefined}
+      className={cn(
+        "h-12 w-full min-w-0 border bg-transparent px-3 text-base text-cream [color-scheme:dark] focus-visible:outline-none md:text-sm",
+        "border-hairline-mid focus-visible:border-gold focus-visible:ring-1 focus-visible:ring-gold aria-invalid:border-red-400 aria-invalid:ring-1 aria-invalid:ring-red-400/40",
+      )}
+      {...register}
+      {...props}
+    >
+      {children}
+    </select>
+  );
+}
+
 // Opción de un grupo de radios, como tarjeta con hairline. El input real está oculto pero es
 // navegable con teclado (flechas) y anuncia su estado; el borde dorado marca la elegida.
 export function ChoiceCard({
