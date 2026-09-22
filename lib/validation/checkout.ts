@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { DELIVERY_METHODS, PAYMENT_METHODS } from "@/lib/orders";
-import { normalizeArPhone } from "@/lib/whatsapp";
+import { phoneSchema } from "@/lib/validation/phone";
 
 // Validación del checkout: la usan el formulario (react-hook-form) y la Server Action.
 
@@ -18,14 +18,10 @@ export const checkoutSchema = z
       (value) => value.length >= 3,
       "Ingresá tu nombre completo",
     ),
-    phone: z
-      .string()
-      .trim()
-      .min(1, "El teléfono es obligatorio")
-      .refine(
-        (value) => normalizeArPhone(value) !== null,
-        "Ingresá tu WhatsApp con código de área y sin el 15 (ej. 11 5555-0101)",
-      ),
+    // Cualquier formato razonable: puede ser un cliente extranjero, y ya no se usa para armar un
+    // link de wa.me directo (el pedido se coordina desde el chat que el cliente abre con la
+    // bodega, no al revés).
+    phone: phoneSchema,
     email: z
       .string()
       .trim()

@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { phoneSchema } from "@/lib/validation/phone";
+
 // Validación de la solicitud de visita: la usan el formulario (react-hook-form) y la Server Action.
 
 const text = (required: string, tooLong: string, max: number) =>
@@ -16,16 +18,7 @@ export const visitRequestSchema = z.object({
     (value) => value.length >= 3,
     "Ingresá tu nombre completo",
   ),
-  // Puede ser un turista del exterior: solo pedimos que parezca un teléfono (8 a 15 dígitos).
-  phone: z
-    .string()
-    .trim()
-    .min(1, "El teléfono es obligatorio")
-    .max(40, "El teléfono es demasiado largo")
-    .refine((value) => {
-      const digits = value.replace(/\D/g, "").length;
-      return digits >= 8 && digits <= 15;
-    }, "Ingresá un teléfono válido, con código de área"),
+  phone: phoneSchema,
   email: z
     .string()
     .trim()

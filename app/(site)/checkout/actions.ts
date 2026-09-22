@@ -4,6 +4,7 @@ import { and, eq, gte, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/lib/db";
+import { buildOrderWhatsappMessage } from "@/lib/order-message";
 import { effectivePrice } from "@/lib/pricing";
 import { orderItems, orders, products } from "@/lib/schema";
 import {
@@ -26,7 +27,7 @@ export type FreshCartProduct = {
 };
 
 export type CreateOrderResult =
-  | { ok: true; orderId: string }
+  | { ok: true; orderId: string; whatsappMessage: string }
   | { ok: false; kind: "validation"; fieldErrors: Record<string, string> }
   | { ok: false; kind: "cart"; message: string; fresh: FreshCartProduct[] }
   | { ok: false; kind: "error"; message: string };
@@ -100,7 +101,7 @@ export async function createOrder(
   const lines = mergeLines(parsedLines.data);
 
   try {
-    const orderId = await db.transaction(async (tx) => {
+    const { orderId, whatsappMessage } = await db.transaction(async (tx) => {
       const priced: { line: OrderLine; name: string; unitPrice: string }[] = [];
 
       for (const line of lines) {
@@ -154,6 +155,10 @@ export async function createOrder(
         0,
       );
 
+      const shippingAddress =
+        data.deliveryMethod === "envio" ? composeAddress(data) : null;
+      const totalStr = (total / 100).toFixed(2);
+
       const [order] = await tx
         .insert(orders)
         .values({
@@ -162,13 +167,12 @@ export async function createOrder(
           customerEmail: data.email.toLowerCase(),
           customerPhone: data.phone,
           deliveryMethod: data.deliveryMethod,
-          shippingAddress:
-            data.deliveryMethod === "envio" ? composeAddress(data) : null,
+          shippingAddress,
           paymentMethod: data.paymentMethod,
           notes: data.notes || null,
-          total: (total / 100).toFixed(2),
+          total: totalStr,
         })
-        .returning({ id: orders.id });
+        .returning({ id: orders.id, number: orders.number });
 
       await tx.insert(orderItems).values(
         priced.map(({ line, name, unitPrice }) => ({
@@ -181,10 +185,28 @@ export async function createOrder(
         })),
       );
 
-      return order.id;
+      // El pedido se termina de coordinar en un chat de WhatsApp iniciado hacia la bodega, con
+      // este mensaje ya cargado.
+      const message = buildOrderWhatsappMessage(
+        {
+          number: order.number,
+          customerName: data.fullName,
+          deliveryMethod: data.deliveryMethod,
+          shippingAddress,
+          paymentMethod: data.paymentMethod,
+          total: totalStr,
+        },
+        priced.map(({ line, name, unitPrice }) => ({
+          productName: name,
+          unitPrice,
+          quantity: line.quantity,
+        })),
+      );
+
+      return { orderId: order.id, whatsappMessage: message };
     });
 
-    return { ok: true, orderId };
+    return { ok: true, orderId, whatsappMessage };
   } catch (error) {
     if (error instanceof CartError) {
       const fresh = await getCartSnapshot(lines.map((line) => line.productId));

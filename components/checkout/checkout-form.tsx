@@ -33,6 +33,7 @@ import {
   type CheckoutData,
   type CheckoutValues,
 } from "@/lib/validation/checkout";
+import { businessWhatsappUrl } from "@/lib/whatsapp";
 import { useHydrated } from "@/lib/use-hydrated";
 
 // Compara el carrito antes y después de alinearlo con la base y lo cuenta en palabras.
@@ -243,7 +244,19 @@ export function CheckoutForm() {
       // `done` primero: evita que el carrito vacío nos redirija al catálogo.
       setDone(true);
       clear();
-      router.push(`/checkout/confirmacion?pedido=${result.orderId}`);
+      // El pedido se termina de coordinar en un chat de WhatsApp iniciado hacia la bodega
+      // (NEXT_PUBLIC_WHATSAPP_NUMBER), con el resumen ya cargado. href y no open(): un cambio de
+      // página por código no dispara el bloqueo de pop-ups del navegador.
+      const whatsappUrl = businessWhatsappUrl(result.whatsappMessage);
+      if (whatsappUrl) {
+        // Navegación real en un manejador de submit (no durante el render): el lint del
+        // compilador de React no distingue esto de una mutación de estado.
+        // eslint-disable-next-line react-hooks/immutability
+        window.location.href = whatsappUrl;
+      } else {
+        // Sin NEXT_PUBLIC_WHATSAPP_NUMBER configurada, la confirmación sirve de respaldo.
+        router.push(`/checkout/confirmacion?pedido=${result.orderId}`);
+      }
       return;
     }
 
@@ -339,10 +352,10 @@ export function CheckoutForm() {
               />
             </Field>
             <Field
-              label="Teléfono (WhatsApp)"
+              label="Teléfono"
               htmlFor="phone"
               error={errors.phone?.message}
-              hint="Con código de área y sin el 15. Por acá te contactamos."
+              hint="Con código de área. Por acá te contactamos."
             >
               <TextInput
                 id="phone"
@@ -351,7 +364,7 @@ export function CheckoutForm() {
                 register={register("phone")}
                 error={errors.phone?.message}
                 autoComplete="tel"
-                placeholder="11 5555-0101"
+                placeholder="Ej: 11 5555-0101"
               />
             </Field>
             <Field label="Email" htmlFor="email" error={errors.email?.message}>
