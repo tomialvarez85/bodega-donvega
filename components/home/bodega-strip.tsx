@@ -20,7 +20,7 @@ export function BodegaStrip({ varietalCount }: BodegaStripProps) {
       className="scroll-mt-20 border-t border-hairline bg-ink"
     >
       <div className="mx-auto max-w-[1200px] px-6 py-[clamp(56px,7vw,96px)] sm:px-8">
-        <div className="mb-[72px] grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-start gap-16">
+        <div className="mb-[72px] grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-center gap-16">
           <div>
             <div className="mb-7 h-px w-8 bg-gold" />
             <h2
