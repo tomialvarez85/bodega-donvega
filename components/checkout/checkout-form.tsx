@@ -86,7 +86,7 @@ function Summary({
         <button
           type="button"
           onClick={onEditCart}
-          className="text-[10px] tracking-[0.16em] text-sand uppercase underline-offset-4 transition-colors hover:text-gold hover:underline"
+          className="relative after:absolute after:inset-x-0 after:top-1/2 after:z-10 after:h-11 after:-translate-y-1/2 after:content-[''] text-[10px] tracking-[0.16em] text-sand uppercase underline-offset-4 transition-colors hover:text-gold hover:underline"
         >
           Modificar
         </button>

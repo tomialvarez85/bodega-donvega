@@ -4,7 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { DeleteExperienceButton } from "@/components/admin/delete-experience-button";
-import { Badge } from "@/components/ui/badge";
+import {
+  ExperienceActiveCell,
+  ExperiencePriceCell,
+} from "@/components/admin/inline/inline-cells";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Table,
@@ -17,21 +20,9 @@ import {
 import { requireAdmin } from "@/lib/auth/session";
 import { formatDuration } from "@/lib/visits";
 import { getAdminExperiences } from "@/lib/experiences";
-import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Visitas" };
-
-const priceLabel = (price: string, unit: string) =>
-  Number(price) > 0 ? `${formatPrice(price)} ${unit}` : "A consultar";
-
-function StatusBadge({ active }: { active: boolean }) {
-  return active ? (
-    <Badge className="bg-green-500/15 text-green-300">Activo</Badge>
-  ) : (
-    <Badge className="bg-hairline text-sand">Inactivo</Badge>
-  );
-}
 
 export default async function AdminVisitasPage() {
   await requireAdmin();
@@ -65,10 +56,10 @@ export default async function AdminVisitasPage() {
               <TableHead className="w-24">Imagen</TableHead>
               <TableHead>Nombre</TableHead>
               <TableHead className="hidden sm:table-cell">Duración</TableHead>
-              <TableHead className="hidden text-right md:table-cell">
+              <TableHead className="hidden text-right xl:table-cell">
                 Precio
               </TableHead>
-              <TableHead className="hidden md:table-cell">Estado</TableHead>
+              <TableHead className="hidden xl:table-cell">Estado</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
           </TableHeader>
@@ -100,22 +91,48 @@ export default async function AdminVisitasPage() {
                     {experience.requests === 1 ? "solicitud" : "solicitudes"}
                   </span>
                   {/* En pantallas chicas, los datos de las columnas ocultas van acá. */}
-                  <span className="mt-1 flex flex-wrap items-center gap-2 font-normal md:hidden">
-                    <span className="tabular-nums">
-                      {formatDuration(experience.durationMinutes)} ·{" "}
-                      {priceLabel(experience.price, experience.priceUnit)}
+                  <span className="mt-2 flex flex-col items-start gap-2 font-normal xl:hidden">
+                    <span className="text-xs text-stone tabular-nums sm:hidden">
+                      {formatDuration(experience.durationMinutes)}
+                      {experience.maxGroupSize
+                        ? ` · hasta ${experience.maxGroupSize} personas`
+                        : ""}
                     </span>
-                    <StatusBadge active={experience.active} />
+                    <ExperiencePriceCell
+                      id={experience.id}
+                      name={experience.name}
+                      price={experience.price}
+                      unit={experience.priceUnit}
+                    />
+                    <ExperienceActiveCell
+                      id={experience.id}
+                      name={experience.name}
+                      active={experience.active}
+                    />
                   </span>
                 </TableCell>
                 <TableCell className="hidden tabular-nums sm:table-cell">
                   {formatDuration(experience.durationMinutes)}
+                  {experience.maxGroupSize && (
+                    <span className="block text-xs text-stone">
+                      Hasta {experience.maxGroupSize} personas
+                    </span>
+                  )}
                 </TableCell>
-                <TableCell className="hidden text-right tabular-nums md:table-cell">
-                  {priceLabel(experience.price, experience.priceUnit)}
+                <TableCell className="hidden xl:table-cell">
+                  <ExperiencePriceCell
+                    id={experience.id}
+                    name={experience.name}
+                    price={experience.price}
+                    unit={experience.priceUnit}
+                  />
                 </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  <StatusBadge active={experience.active} />
+                <TableCell className="hidden xl:table-cell">
+                  <ExperienceActiveCell
+                    id={experience.id}
+                    name={experience.name}
+                    active={experience.active}
+                  />
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-end gap-2">
@@ -124,11 +141,11 @@ export default async function AdminVisitasPage() {
                       aria-label={`Editar ${experience.name}`}
                       className={cn(
                         buttonVariants({ variant: "outline", size: "sm" }),
-                        "border-input bg-card",
+                        "border-input bg-card h-10 w-10 px-0 xl:h-7 xl:w-auto xl:px-2.5",
                       )}
                     >
                       <Pencil aria-hidden />
-                      <span className="hidden lg:inline">Editar</span>
+                      <span className="hidden xl:inline">Editar</span>
                     </Link>
                     <DeleteExperienceButton
                       id={experience.id}

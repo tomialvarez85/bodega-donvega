@@ -2,11 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import {
-  AdminNotConfiguredError,
-  checkAdminCredentials,
-} from "@/lib/auth/credentials";
-import { createSession, destroySession } from "@/lib/auth/session";
+import { createClient } from "@/lib/supabase/server";
 
 export type LoginState = { error?: string } | undefined;
 
@@ -30,17 +26,25 @@ export async function login(
   }
 
   try {
-    if (!(await checkAdminCredentials(email, password))) {
-      return { error: "Email o contraseña incorrectos." };
+    const supabase = await createClient();
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+
+    if (error) {
+      // 400 = credenciales inválidas; cualquier otra cosa es un problema del servicio.
+      if (error.status === 400 || error.code === "invalid_credentials") {
+        return { error: "Email o contraseña incorrectos." };
+      }
+      console.error("[admin login]", error);
+      return { error: "No se pudo iniciar sesión. Probá de nuevo en un momento." };
     }
-    await createSession();
   } catch (error) {
     console.error("[admin login]", error);
     return {
       error:
-        error instanceof AdminNotConfiguredError
-          ? "El acceso de administrador no está configurado en el servidor."
-          : "No se pudo iniciar sesión. Revisá la configuración del servidor.",
+        "No se pudo iniciar sesión. Revisá la configuración de Supabase del servidor.",
     };
   }
 
@@ -48,6 +52,11 @@ export async function login(
 }
 
 export async function logout() {
-  await destroySession();
+  try {
+    const supabase = await createClient();
+    await supabase.auth.signOut();
+  } catch (error) {
+    console.error("[admin logout]", error);
+  }
   redirect("/admin/login");
 }

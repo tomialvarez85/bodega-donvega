@@ -101,7 +101,7 @@ export function ComboCard({ combo }: { combo: ComboWithItems }) {
               href={whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-5 inline-flex border-b border-gold pb-1 text-[10px] tracking-[0.18em] text-gold uppercase transition-colors hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+              className="relative after:absolute after:inset-x-0 after:top-1/2 after:h-11 after:-translate-y-1/2 after:content-[''] mt-5 inline-flex border-b border-gold pb-1 text-[10px] tracking-[0.18em] text-gold uppercase transition-colors hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
             >
               Consultar por WhatsApp
             </a>

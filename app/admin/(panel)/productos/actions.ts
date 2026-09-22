@@ -1,19 +1,17 @@
 "use server";
 
-import { put } from "@vercel/blob";
 import { and, eq, ne } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 import {
-  deleteBlobQuietly,
   isForeignKeyViolation,
   isUniqueViolation,
 } from "@/lib/admin-server";
 import { requireAdmin } from "@/lib/auth/session";
 import { db } from "@/lib/db";
+import { deleteImageQuietly, uploadImage } from "@/lib/storage";
 import { products } from "@/lib/schema";
 import {
-  IMAGE_TYPES,
   isUuid,
   parseProductFormData,
   validateImageFile,
@@ -77,27 +75,9 @@ export async function saveProduct(
   let uploadedUrl: string | null = null;
 
   if (newImage) {
-    if (!process.env.BLOB_READ_WRITE_TOKEN) {
-      return {
-        ok: false,
-        message:
-          "Falta BLOB_READ_WRITE_TOKEN en el servidor: no se puede subir la imagen.",
-      };
-    }
-    try {
-      const blob = await put(
-        `products/${data.slug}.${IMAGE_TYPES[newImage.type]}`,
-        newImage,
-        { access: "public", addRandomSuffix: true, contentType: newImage.type },
-      );
-      uploadedUrl = imageUrl = blob.url;
-    } catch (error) {
-      console.error("[admin] falló la subida a Vercel Blob", error);
-      return {
-        ok: false,
-        message: "No se pudo subir la imagen. Probá de nuevo en un momento.",
-      };
-    }
+    const upload = await uploadImage("products", data.slug, newImage);
+    if (!upload.ok) return { ok: false, message: upload.message };
+    uploadedUrl = imageUrl = upload.url;
   }
 
   try {
@@ -110,7 +90,7 @@ export async function saveProduct(
       await db.insert(products).values({ ...data, imageUrl });
     }
   } catch (error) {
-    if (uploadedUrl) await deleteBlobQuietly(uploadedUrl);
+    if (uploadedUrl) await deleteImageQuietly(uploadedUrl);
     if (isUniqueViolation(error)) {
       return {
         ok: false,
@@ -122,7 +102,7 @@ export async function saveProduct(
   }
 
   // Imagen reemplazada: la anterior ya no se usa.
-  if (uploadedUrl && existing) await deleteBlobQuietly(existing.imageUrl);
+  if (uploadedUrl && existing) await deleteImageQuietly(existing.imageUrl);
 
   revalidatePath("/admin/productos");
   return { ok: true };
@@ -140,7 +120,7 @@ export async function deleteProduct(id: string): Promise<DeleteResult> {
       .returning({ imageUrl: products.imageUrl });
     if (!deleted) return { ok: false, message: "Este producto ya no existe." };
 
-    await deleteBlobQuietly(deleted.imageUrl);
+    await deleteImageQuietly(deleted.imageUrl);
   } catch (error) {
     if (isForeignKeyViolation(error)) {
       return {

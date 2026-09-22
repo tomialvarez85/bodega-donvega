@@ -19,7 +19,7 @@ export default function NotFound() {
           <div className="h-px w-16 bg-gold" />
           <Link
             href="/catalogo"
-            className="border-b border-gold pb-1 text-xs tracking-[0.18em] text-gold uppercase transition-colors hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+            className="relative after:absolute after:inset-x-0 after:top-1/2 after:h-11 after:-translate-y-1/2 after:content-[''] border-b border-gold pb-1 text-xs tracking-[0.18em] text-gold uppercase transition-colors hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
           >
             Ver el catálogo
           </Link>

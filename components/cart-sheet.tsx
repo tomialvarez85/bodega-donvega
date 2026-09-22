@@ -67,7 +67,7 @@ function CartLine({ item }: { item: CartItem }) {
             type="button"
             onClick={() => removeItem(item.id)}
             aria-label={`Quitar ${item.name} del carrito`}
-            className="-my-2 shrink-0 py-2 text-[10px] tracking-[0.16em] text-sand uppercase underline-offset-4 transition-colors hover:text-gold hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+            className="-my-3 shrink-0 py-3 text-[10px] tracking-[0.16em] text-sand uppercase underline-offset-4 transition-colors hover:text-gold hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
           >
             Quitar
           </button>

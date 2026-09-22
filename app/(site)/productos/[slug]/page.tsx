@@ -65,7 +65,7 @@ export async function generateMetadata({
 }
 
 const crumbLink =
-  "transition-colors hover:text-sand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold";
+  "inline-block py-2.5 -my-2.5 transition-colors hover:text-sand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold";
 const gutter = "px-[clamp(20px,5vw,80px)]";
 
 export default async function ProductoPage({ params }: { params: Params }) {
@@ -187,11 +187,11 @@ export default async function ProductoPage({ params }: { params: Params }) {
             </p>
 
             {meta.length > 0 && (
-              <ul className="mb-9 flex overflow-x-auto border-y border-hairline-mid">
+              <ul className="mb-9 grid grid-cols-2 border-y border-hairline-mid sm:flex sm:overflow-x-auto">
                 {meta.map((item) => (
                   <li
                     key={item.key}
-                    className="mr-5 min-w-[90px] shrink-0 border-r border-hairline-mid py-3.5 pr-5 last:mr-0 last:border-r-0"
+                    className="min-w-[90px] border-hairline-mid py-3.5 pr-5 max-sm:odd:border-r max-sm:even:pl-5 max-sm:nth-[n+3]:border-t max-sm:last:border-r-0 sm:mr-5 sm:shrink-0 sm:border-r sm:last:mr-0 sm:last:border-r-0"
                   >
                     <span className="mb-[3px] block text-[9px] tracking-[0.22em] text-stone uppercase">
                       {item.key}

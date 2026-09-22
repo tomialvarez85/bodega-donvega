@@ -15,7 +15,7 @@ export default async function NuevoComboPage() {
     <div className="max-w-3xl">
       <Link
         href="/admin/combos"
-        className="text-sm text-sand underline-offset-4 hover:text-cream hover:underline"
+        className="inline-block py-2 text-sm text-sand underline-offset-4 hover:text-cream hover:underline"
       >
         ← Volver a combos
       </Link>

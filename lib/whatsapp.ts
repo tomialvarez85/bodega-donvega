@@ -22,12 +22,6 @@ export function normalizeArPhone(phone: string): string | null {
   return digits.length >= 12 && digits.length <= 13 ? digits : null;
 }
 
-export function whatsappUrl(phone: string, message: string): string | null {
-  const normalized = normalizeArPhone(phone);
-  if (!normalized) return null;
-  return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
-}
-
 // WhatsApp de la bodega (NEXT_PUBLIC_WHATSAPP_NUMBER, solo dígitos con código de país, ej.
 // 5492610000000). Devuelve null si no está configurado: el botón simplemente no se muestra.
 export function businessWhatsappUrl(message: string): string | null {
@@ -36,21 +30,12 @@ export function businessWhatsappUrl(message: string): string | null {
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }
 
-// Teléfono de un contacto de la bodega (visitas): puede ser de cualquier país. Primero se prueba
-// como argentino; si no cuadra, se acepta solo si viene con "+" o "00" (código de país explícito).
-export function normalizeContactPhone(phone: string): string | null {
-  const argentine = normalizeArPhone(phone);
-  if (argentine) return argentine;
-
-  const trimmed = phone.trim();
-  if (!trimmed.startsWith("+") && !trimmed.startsWith("00")) return null;
-  let digits = trimmed.replace(/\D/g, "");
-  if (digits.startsWith("00")) digits = digits.slice(2);
-  return digits.length >= 10 && digits.length <= 15 ? digits : null;
-}
-
-export function contactWhatsappUrl(phone: string, message: string): string | null {
-  const normalized = normalizeContactPhone(phone);
-  if (!normalized) return null;
-  return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
+// Número de WhatsApp de la bodega para mostrar en pantalla ("+5493835000000" => "+54 9 3835000000").
+// Devuelve null si NEXT_PUBLIC_WHATSAPP_NUMBER no está configurado.
+export function businessWhatsappDisplay(): string | null {
+  const number = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "").replace(/\D/g, "");
+  if (number.length < 10) return null;
+  return number.startsWith("549")
+    ? `+54 9 ${number.slice(3)}`
+    : `+${number}`;
 }

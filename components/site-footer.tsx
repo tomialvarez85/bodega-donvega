@@ -1,41 +1,21 @@
 import Link from "next/link";
 
+import { InstagramIcon } from "@/components/instagram-icon";
 import { LogoMark } from "@/components/logo-mark";
-import { CONTACT } from "@/lib/site";
-
-// lucide-react v1 ya no incluye íconos de marcas.
-function InstagramIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
-      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-    </svg>
-  );
-}
+import { CONTACT, instagramUrl } from "@/lib/site";
 
 const FOOTER_LINKS = [
   { label: "Catálogo", href: "/catalogo" },
   { label: "Selección especial", href: "/promociones" },
   { label: "Visitas y Catas", href: "/visitas" },
   { label: "Nosotros", href: "/#nosotros" },
-  { label: "Contacto", href: "#contacto" },
+  { label: "Contacto", href: "/contacto" },
 ];
 
 const columnTitle =
   "mb-5 text-[10px] font-semibold tracking-[0.12em] text-stone uppercase";
 const footerLink =
-  "text-[13px] text-line transition-colors duration-200 hover:text-gold motion-reduce:transition-none";
+  "inline-flex min-h-11 items-center text-[13px] text-line transition-colors duration-200 hover:text-gold motion-reduce:transition-none lg:min-h-0";
 
 export function SiteFooter() {
   return (
@@ -63,7 +43,7 @@ export function SiteFooter() {
 
           <nav aria-label="Pie de página">
             <p className={columnTitle}>Navegación</p>
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col lg:gap-3">
               {FOOTER_LINKS.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className={footerLink}>
@@ -76,7 +56,7 @@ export function SiteFooter() {
 
           <div>
             <p className={columnTitle}>Contacto</p>
-            <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col lg:gap-2.5">
               <a href={`mailto:${CONTACT.email}`} className={footerLink}>
                 {CONTACT.email}
               </a>
@@ -89,7 +69,7 @@ export function SiteFooter() {
           <div>
             <p className={columnTitle}>Redes</p>
             <a
-              href={`https://instagram.com/${CONTACT.instagram}`}
+              href={instagramUrl()}
               target="_blank"
               rel="noopener noreferrer"
               className={`${footerLink} inline-flex items-center gap-2.5`}

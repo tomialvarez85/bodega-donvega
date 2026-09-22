@@ -5,7 +5,7 @@ import { useActionState } from "react";
 import { login } from "./actions";
 
 const inputClass =
-  "h-10 w-full border border-input bg-card px-3 text-sm text-cream outline-none focus-visible:border-gold focus-visible:ring-2 focus-visible:ring-gold/25";
+  "h-10 w-full border border-input bg-card px-3 text-base text-cream md:text-sm outline-none focus-visible:border-gold focus-visible:ring-2 focus-visible:ring-gold/25";
 
 export function LoginForm({ next }: { next?: string }) {
   const [state, action, pending] = useActionState(login, undefined);

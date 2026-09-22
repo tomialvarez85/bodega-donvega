@@ -30,13 +30,13 @@ export default function SiteError({
         <button
           type="button"
           onClick={() => retry()}
-          className="border-b border-gold pb-1 text-xs tracking-[0.18em] text-gold uppercase transition-colors hover:text-cream"
+          className="relative after:absolute after:inset-x-0 after:top-1/2 after:h-11 after:-translate-y-1/2 after:content-[''] border-b border-gold pb-1 text-xs tracking-[0.18em] text-gold uppercase transition-colors hover:text-cream"
         >
           Reintentar
         </button>
         <Link
           href="/"
-          className="border-b border-sand pb-1 text-xs tracking-[0.18em] text-sand uppercase transition-colors hover:text-gold"
+          className="relative after:absolute after:inset-x-0 after:top-1/2 after:h-11 after:-translate-y-1/2 after:content-[''] border-b border-sand pb-1 text-xs tracking-[0.18em] text-sand uppercase transition-colors hover:text-gold"
         >
           Ir al inicio
         </Link>

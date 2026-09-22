@@ -6,13 +6,13 @@ import { CartTrigger } from "@/components/cart-trigger";
 import { LogoMark } from "@/components/logo-mark";
 import { MobileNav } from "@/components/mobile-nav";
 
-// "Nosotros" vive en el Home; "Contacto" es el footer, presente en todas las páginas.
+// "Nosotros" vive en el Home; "Contacto" tiene su propia página con la ubicación de la bodega.
 const NAV_LINKS = [
   { label: "Catálogo", href: "/catalogo" },
   { label: "Selección especial", href: "/promociones" },
   { label: "Visitas y Catas", href: "/visitas" },
   { label: "Nosotros", href: "/#nosotros" },
-  { label: "Contacto", href: "#contacto" },
+  { label: "Contacto", href: "/contacto" },
 ];
 
 export function SiteHeader() {

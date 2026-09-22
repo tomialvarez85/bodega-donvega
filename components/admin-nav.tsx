@@ -2,11 +2,9 @@
 
 import {
   Boxes,
-  CalendarCheck,
   Compass,
   LayoutDashboard,
   Package,
-  Receipt,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,9 +15,7 @@ const ITEMS = [
   { label: "Resumen", href: "/admin", icon: LayoutDashboard, exact: true },
   { label: "Productos", href: "/admin/productos", icon: Package },
   { label: "Combos", href: "/admin/combos", icon: Boxes },
-  { label: "Pedidos", href: "/admin/pedidos", icon: Receipt },
   { label: "Visitas", href: "/admin/visitas", icon: Compass },
-  { label: "Reservas", href: "/admin/reservas", icon: CalendarCheck },
 ];
 
 export function AdminNav() {

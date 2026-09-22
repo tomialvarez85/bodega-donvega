@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 // Piezas del formulario de checkout. Mismo lenguaje que el resto del sitio: etiquetas en
 // mayúsculas chicas, hairlines, foco dorado, sin sombras.
 
-export const eyebrow = "text-[10px] tracking-[0.18em] text-sand uppercase";
+export const eyebrow = "text-[11px] tracking-[0.18em] text-sand uppercase";
 
 const controlClass =
   "rounded-none border-hairline-mid bg-transparent px-4 text-cream placeholder:text-stone focus-visible:border-gold focus-visible:ring-1 focus-visible:ring-gold aria-invalid:border-red-400 aria-invalid:ring-1 aria-invalid:ring-red-400/40";

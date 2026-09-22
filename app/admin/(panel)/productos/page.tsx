@@ -4,6 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { DeleteProductButton } from "@/components/admin/delete-product-button";
+import {
+  ProductActiveCell,
+  ProductPriceCell,
+  ProductStockCell,
+} from "@/components/admin/inline/inline-cells";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -23,13 +28,12 @@ import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Productos" };
 
-// Precio vigente; si el vino está en oferta, el anterior va tachado debajo.
-function PriceCell({ product }: { product: Product }) {
-  if (!isDiscounted(product)) return <>{formatPrice(product.price)}</>;
+// Si el vino está en oferta, el precio efectivo va debajo del campo (que edita el precio normal).
+function SaleNote({ product }: { product: Product }) {
+  if (!isDiscounted(product)) return null;
   return (
-    <span className="inline-flex flex-col items-end leading-tight">
-      <span>{formatPrice(effectivePrice(product))}</span>
-      <s className="text-xs text-stone">{formatPrice(product.price)}</s>
+    <span className="mt-0.5 block text-right text-[11px] text-gold tabular-nums">
+      Oferta: {formatPrice(effectivePrice(product))}
     </span>
   );
 }
@@ -89,7 +93,7 @@ export default async function AdminProductosPage({
           type="search"
           defaultValue={q}
           placeholder="Buscar por nombre…"
-          className="h-10 w-full max-w-xs border border-input bg-card px-3 text-sm text-cream outline-none placeholder:text-stone focus-visible:border-gold focus-visible:ring-2 focus-visible:ring-gold/25"
+          className="h-10 w-full max-w-xs border border-input bg-card px-3 text-base text-cream md:text-sm outline-none placeholder:text-stone focus-visible:border-gold focus-visible:ring-2 focus-visible:ring-gold/25"
         />
         <Button
           type="submit"
@@ -115,13 +119,13 @@ export default async function AdminProductosPage({
             <TableRow className="bg-muted">
               <TableHead className="w-16">Imagen</TableHead>
               <TableHead>Nombre</TableHead>
-              <TableHead className="hidden lg:table-cell">Categoría</TableHead>
-              <TableHead className="hidden lg:table-cell">Varietal</TableHead>
-              <TableHead className="hidden text-right md:table-cell">
+              <TableHead className="hidden min-[1320px]:table-cell">Categoría</TableHead>
+              <TableHead className="hidden min-[1320px]:table-cell">Varietal</TableHead>
+              <TableHead className="hidden text-right xl:table-cell">
                 Precio
               </TableHead>
-              <TableHead>Stock</TableHead>
-              <TableHead className="hidden md:table-cell">Estado</TableHead>
+              <TableHead className="hidden text-right xl:table-cell">Stock</TableHead>
+              <TableHead className="hidden xl:table-cell">Estado</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
           </TableHeader>
@@ -158,37 +162,64 @@ export default async function AdminProductosPage({
                     {product.vintage ? ` · ${product.vintage}` : ""}
                   </span>
                   {/* En pantallas chicas, los datos de las columnas ocultas van acá. */}
-                  <span className="block text-xs font-normal text-stone lg:hidden">
+                  <span className="block text-xs font-normal text-stone min-[1320px]:hidden">
                     {product.category} · {product.varietal}
                   </span>
-                  <span className="mt-1 flex flex-wrap items-center gap-2 font-normal md:hidden">
-                    <span className="tabular-nums">
-                      {formatPrice(effectivePrice(product))}
+                  <span className="mt-2 flex flex-col items-start gap-2 font-normal xl:hidden">
+                    <span className="flex flex-wrap items-start gap-x-3 gap-y-2">
+                      <span className="flex flex-col items-end">
+                        <ProductPriceCell
+                          id={product.id}
+                          name={product.name}
+                          price={product.price}
+                        />
+                        <SaleNote product={product} />
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <span
+                          aria-hidden
+                          className="text-[11px] tracking-wide text-stone uppercase"
+                        >
+                          Stock
+                        </span>
+                        <ProductStockCell
+                          id={product.id}
+                          name={product.name}
+                          stock={product.stock}
+                        />
+                      </span>
                     </span>
-                    {product.active ? (
-                      <Badge className="bg-green-500/15 text-green-300">
-                        Activo
-                      </Badge>
-                    ) : (
-                      <Badge className="bg-hairline text-sand">
-                        Inactivo
-                      </Badge>
-                    )}
-                    <SaleBadge product={product} />
+                    <span className="flex flex-wrap items-center gap-2">
+                      <ProductActiveCell
+                        id={product.id}
+                        name={product.name}
+                        active={product.active}
+                      />
+                      <SaleBadge product={product} />
+                    </span>
                   </span>
                 </TableCell>
-                <TableCell className="hidden lg:table-cell">
+                <TableCell className="hidden min-[1320px]:table-cell">
                   {product.category}
                 </TableCell>
-                <TableCell className="hidden whitespace-normal lg:table-cell">
+                <TableCell className="hidden whitespace-normal min-[1320px]:table-cell">
                   {product.varietal}
                 </TableCell>
-                <TableCell className="hidden text-right tabular-nums md:table-cell">
-                  <PriceCell product={product} />
+                <TableCell className="hidden xl:table-cell">
+                  <ProductPriceCell
+                    id={product.id}
+                    name={product.name}
+                    price={product.price}
+                  />
+                  <SaleNote product={product} />
                 </TableCell>
-                <TableCell>
-                  <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-2">
-                    <span className="tabular-nums">{product.stock}</span>
+                <TableCell className="hidden xl:table-cell">
+                  <div className="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:justify-end sm:gap-2">
+                    <ProductStockCell
+                      id={product.id}
+                      name={product.name}
+                      stock={product.stock}
+                    />
                     {product.stock === 0 ? (
                       <Badge className="bg-red-500/15 text-red-200">
                         Sin stock
@@ -200,17 +231,13 @@ export default async function AdminProductosPage({
                     ) : null}
                   </div>
                 </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  <div className="flex flex-wrap gap-1.5">
-                    {product.active ? (
-                    <Badge className="bg-green-500/15 text-green-300">
-                      Activo
-                    </Badge>
-                  ) : (
-                    <Badge className="bg-hairline text-sand">
-                      Inactivo
-                    </Badge>
-                  )}
+                <TableCell className="hidden xl:table-cell">
+                  <div className="flex flex-col items-start gap-1.5">
+                    <ProductActiveCell
+                      id={product.id}
+                      name={product.name}
+                      active={product.active}
+                    />
                     <SaleBadge product={product} />
                   </div>
                 </TableCell>
@@ -221,11 +248,11 @@ export default async function AdminProductosPage({
                       aria-label={`Editar ${product.name}`}
                       className={cn(
                         buttonVariants({ variant: "outline", size: "sm" }),
-                        "border-input bg-card",
+                        "border-input bg-card h-10 w-10 px-0 xl:h-7 xl:w-auto xl:px-2.5",
                       )}
                     >
                       <Pencil aria-hidden />
-                      <span className="hidden lg:inline">Editar</span>
+                      <span className="hidden xl:inline">Editar</span>
                     </Link>
                     <DeleteProductButton id={product.id} name={product.name} />
                   </div>

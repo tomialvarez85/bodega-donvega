@@ -1,45 +1,31 @@
 import "server-only";
 
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 
-import {
-  SESSION_COOKIE,
-  SESSION_MAX_AGE,
-  signSessionToken,
-  verifySessionToken,
-} from "./token";
+import { createClient } from "@/lib/supabase/server";
 
-// Path limitado a /admin: el navegador no manda la cookie al sitio público.
-const COOKIE_PATH = "/admin";
+// Usuario de Supabase con sesión válida, o null. getUser() consulta al servidor de Auth (no se
+// fía solo de la cookie), y `cache` evita repetir la consulta dentro de una misma request.
+export const getAdminUser = cache(async () => {
+  // Fuera del try/catch a propósito: cookies() avisa a Next que la página es dinámica lanzando
+  // una señal interna que no hay que tragarse (si no, el build intentaría prerenderizar el admin).
+  const supabase = await createClient();
 
-export async function createSession() {
-  const token = await signSessionToken();
-  (await cookies()).set(SESSION_COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: COOKIE_PATH,
-    maxAge: SESSION_MAX_AGE,
-  });
-}
-
-export async function destroySession() {
-  (await cookies()).set(SESSION_COOKIE, "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: COOKIE_PATH,
-    maxAge: 0,
-  });
-}
-
-export const hasValidSession = cache(async () =>
-  verifySessionToken((await cookies()).get(SESSION_COOKIE)?.value),
-);
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    return error ? null : data.user;
+  } catch (error) {
+    // Supabase no responde: sin verificación no hay sesión (falla cerrada).
+    console.error("[auth] no se pudo verificar la sesión", error);
+    return null;
+  }
+});
 
 // Segunda barrera además de proxy.ts: llamarla en cada página/acción de /admin.
+// El registro público de Supabase está desactivado: el único usuario es el admin.
 export async function requireAdmin() {
-  if (!(await hasValidSession())) redirect("/admin/login");
+  const user = await getAdminUser();
+  if (!user) redirect("/admin/login");
+  return user;
 }

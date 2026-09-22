@@ -45,12 +45,12 @@ export function DeleteProductButton({ id, name }: { id: string; name: string }) 
             variant="outline"
             size="sm"
             aria-label={`Eliminar ${name}`}
-            className="border-input bg-card text-red-300 hover:bg-red-500/10 hover:text-red-200"
+            className="border-input bg-card text-red-300 hover:bg-red-500/10 hover:text-red-200 h-10 w-10 px-0 xl:h-7 xl:w-auto xl:px-2.5"
           />
         }
       >
         <Trash2 aria-hidden />
-        <span className="hidden lg:inline">Eliminar</span>
+        <span className="hidden xl:inline">Eliminar</span>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

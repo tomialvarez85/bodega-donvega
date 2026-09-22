@@ -3,15 +3,15 @@ import Link from "next/link";
 
 import { requireAdmin } from "@/lib/auth/session";
 import { db } from "@/lib/db";
-import { orders, products } from "@/lib/schema";
+import { products } from "@/lib/schema";
 
 export default async function AdminDashboardPage() {
   await requireAdmin();
 
-  const [[activeProducts], [pendingOrders]] = await Promise.all([
-    db.select({ value: count() }).from(products).where(eq(products.active, true)),
-    db.select({ value: count() }).from(orders).where(eq(orders.status, "pendiente")),
-  ]);
+  const [activeProducts] = await db
+    .select({ value: count() })
+    .from(products)
+    .where(eq(products.active, true));
 
   const metrics = [
     {
@@ -19,12 +19,6 @@ export default async function AdminDashboardPage() {
       value: activeProducts.value,
       href: "/admin/productos",
       cta: "Ver productos",
-    },
-    {
-      label: "Pedidos pendientes",
-      value: pendingOrders.value,
-      href: "/admin/pedidos",
-      cta: "Ver pedidos",
     },
   ];
 
@@ -44,7 +38,7 @@ export default async function AdminDashboardPage() {
             </dd>
             <Link
               href={metric.href}
-              className="text-sm font-medium text-gold underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:outline-none"
+              className="inline-block py-2 text-sm font-medium text-gold underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:outline-none"
             >
               {metric.cta}
             </Link>

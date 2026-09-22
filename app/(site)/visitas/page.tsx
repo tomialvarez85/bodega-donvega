@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ghostButton } from "@/components/home/buttons";
+import { UbicacionBodega } from "@/components/ubicacion-bodega";
 import { ExperienceCard } from "@/components/visits/experience-card";
 import { getActiveExperiences } from "@/lib/experiences";
 
@@ -90,6 +91,21 @@ export default async function VisitasPage() {
           </section>
         </>
       )}
+
+      <section
+        aria-labelledby="como-llegar"
+        className={`border-t border-hairline py-[72px] ${gutter}`}
+      >
+        <div className="mx-auto max-w-[1440px]">
+          <h2
+            id="como-llegar"
+            className="mb-10 font-display text-[clamp(28px,4vw,40px)] leading-[1.1] font-semibold tracking-[-0.01em] text-cream"
+          >
+            Cómo llegar a la bodega
+          </h2>
+          <UbicacionBodega />
+        </div>
+      </section>
     </div>
   );
 }

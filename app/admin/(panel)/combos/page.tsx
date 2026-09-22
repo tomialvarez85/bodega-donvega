@@ -4,6 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { DeleteComboButton } from "@/components/admin/delete-combo-button";
+import {
+  ComboActiveCell,
+  ComboPriceCell,
+} from "@/components/admin/inline/inline-cells";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -16,7 +20,6 @@ import {
 } from "@/components/ui/table";
 import { requireAdmin } from "@/lib/auth/session";
 import { getAdminCombos } from "@/lib/combos";
-import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Combos" };
@@ -52,11 +55,11 @@ export default async function AdminCombosPage() {
             <TableRow className="bg-muted">
               <TableHead className="w-24">Imagen</TableHead>
               <TableHead>Nombre</TableHead>
-              <TableHead className="hidden text-right md:table-cell">
+              <TableHead className="hidden text-right xl:table-cell">
                 Precio
               </TableHead>
               <TableHead className="hidden sm:table-cell">Incluye</TableHead>
-              <TableHead className="hidden md:table-cell">Estado</TableHead>
+              <TableHead className="hidden xl:table-cell">Estado</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
           </TableHeader>
@@ -90,21 +93,25 @@ export default async function AdminCombosPage() {
                     /promociones#{combo.slug}
                   </span>
                   {/* En pantallas chicas, los datos de las columnas ocultas van acá. */}
-                  <span className="mt-1 flex flex-wrap items-center gap-2 font-normal md:hidden">
-                    <span className="tabular-nums">
-                      {formatPrice(combo.price)}
-                    </span>
-                    {combo.active ? (
-                      <Badge className="bg-green-500/15 text-green-300">
-                        Activo
-                      </Badge>
-                    ) : (
-                      <Badge className="bg-hairline text-sand">Inactivo</Badge>
-                    )}
+                  <span className="mt-2 flex flex-col items-start gap-2 font-normal xl:hidden">
+                    <ComboPriceCell
+                      id={combo.id}
+                      name={combo.name}
+                      price={combo.price}
+                    />
+                    <ComboActiveCell
+                      id={combo.id}
+                      name={combo.name}
+                      active={combo.active}
+                    />
                   </span>
                 </TableCell>
-                <TableCell className="hidden text-right tabular-nums md:table-cell">
-                  {formatPrice(combo.price)}
+                <TableCell className="hidden xl:table-cell">
+                  <ComboPriceCell
+                    id={combo.id}
+                    name={combo.name}
+                    price={combo.price}
+                  />
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">
                   {combo.lines === 0 ? (
@@ -121,14 +128,12 @@ export default async function AdminCombosPage() {
                     </span>
                   )}
                 </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {combo.active ? (
-                    <Badge className="bg-green-500/15 text-green-300">
-                      Activo
-                    </Badge>
-                  ) : (
-                    <Badge className="bg-hairline text-sand">Inactivo</Badge>
-                  )}
+                <TableCell className="hidden xl:table-cell">
+                  <ComboActiveCell
+                    id={combo.id}
+                    name={combo.name}
+                    active={combo.active}
+                  />
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-end gap-2">
@@ -137,11 +142,11 @@ export default async function AdminCombosPage() {
                       aria-label={`Editar ${combo.name}`}
                       className={cn(
                         buttonVariants({ variant: "outline", size: "sm" }),
-                        "border-input bg-card",
+                        "border-input bg-card h-10 w-10 px-0 xl:h-7 xl:w-auto xl:px-2.5",
                       )}
                     >
                       <Pencil aria-hidden />
-                      <span className="hidden lg:inline">Editar</span>
+                      <span className="hidden xl:inline">Editar</span>
                     </Link>
                     <DeleteComboButton id={combo.id} name={combo.name} />
                   </div>

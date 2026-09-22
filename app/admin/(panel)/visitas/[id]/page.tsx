@@ -26,7 +26,7 @@ export default async function EditarExperienciaPage({
     <div className="max-w-3xl">
       <Link
         href="/admin/visitas"
-        className="text-sm text-sand underline-offset-4 hover:text-cream hover:underline"
+        className="inline-block py-2 text-sm text-sand underline-offset-4 hover:text-cream hover:underline"
       >
         ← Volver a visitas
       </Link>

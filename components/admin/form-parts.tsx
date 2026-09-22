@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 // Piezas comunes de los formularios del admin (productos y combos).
 
 export const controlClass =
-  "w-full border border-input bg-card px-3 text-sm text-cream outline-none placeholder:text-stone focus-visible:border-gold focus-visible:ring-2 focus-visible:ring-gold/25 aria-invalid:border-red-600";
+  "w-full border border-input bg-card px-3 text-base text-cream md:text-sm outline-none placeholder:text-stone focus-visible:border-gold focus-visible:ring-2 focus-visible:ring-gold/25 aria-invalid:border-red-600";
 
 export function Field({
   id,
