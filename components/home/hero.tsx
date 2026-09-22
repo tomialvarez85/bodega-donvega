@@ -4,9 +4,11 @@ import { ghostButton, solidButton } from "@/components/home/buttons";
 
 export function Hero() {
   return (
+    // min-h resta los 72px del header fijo (components/site-header.tsx): centra en el alto
+    // visible de la pantalla, no en el alto de documento completo.
     <section
       aria-labelledby="hero-title"
-      className="mx-auto max-w-[1200px] px-6 pt-[clamp(72px,10vw,128px)] pb-[clamp(80px,12vw,140px)] sm:px-8"
+      className="mx-auto flex min-h-[calc(100dvh-72px)] max-w-[1200px] flex-col items-center justify-center px-6 py-[clamp(72px,10vw,128px)] text-center sm:px-8"
     >
       <p className="mb-6 text-[11px] font-medium tracking-[0.14em] text-sand uppercase">
         Tinogasta, Catamarca — 1.230 msnm
@@ -30,7 +32,7 @@ export function Hero() {
         no se puede imitar.
       </p>
 
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap justify-center gap-4">
         <Link href="/catalogo" className={solidButton}>
           Ver catálogo
         </Link>
@@ -39,7 +41,7 @@ export function Hero() {
         </Link>
       </div>
 
-      <div className="mt-20 flex items-center gap-6" aria-hidden>
+      <div className="mt-20 flex w-full max-w-[420px] items-center gap-6" aria-hidden>
         <div className="h-px flex-1 bg-hairline-mid" />
         <span className="font-display text-[13px] tracking-[0.06em] whitespace-nowrap text-sand">
           Viñedos desde 1945
