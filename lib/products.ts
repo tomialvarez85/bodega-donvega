@@ -69,6 +69,16 @@ export async function getCatalogVarietals() {
   return [...grapes].sort((a, b) => a.localeCompare(b, "es"));
 }
 
+// Cantidad de vinos activos del catálogo (para el stat "Varietales únicos" del Home).
+export async function getActiveProductCount() {
+  const rows = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(products)
+    .where(eq(products.active, true));
+
+  return Number(rows[0]?.count ?? 0);
+}
+
 // Cacheado por request: lo usan generateMetadata y la página sin duplicar la query.
 export const getProductBySlug = cache(async (slug: string) => {
   const [product] = await db

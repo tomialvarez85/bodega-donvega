@@ -3,19 +3,19 @@ import { FeaturedWines } from "@/components/home/featured-wines";
 import { Hero } from "@/components/home/hero";
 import { NewsletterSection } from "@/components/home/newsletter-section";
 import { VideoSection } from "@/components/home/video-section";
-import { getCatalogVarietals, getFeaturedProducts } from "@/lib/products";
+import { getActiveProductCount, getFeaturedProducts } from "@/lib/products";
 
 // Lee los vinos destacados de la base en cada visita (no se prerenderiza en el build).
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   // Si la base no responde, el Home igual carga (sin la sección de vinos).
-  const [featured, varietals] = await Promise.all([
+  const [featured, activeProductCount] = await Promise.all([
     getFeaturedProducts(3),
-    getCatalogVarietals(),
+    getActiveProductCount(),
   ]).catch((error) => {
     console.error("[home] no se pudieron leer los vinos destacados", error);
-    return [[], []] as const;
+    return [[], 0] as const;
   });
 
   return (
@@ -23,7 +23,7 @@ export default async function Home() {
       <Hero />
       <VideoSection />
       <FeaturedWines products={[...featured]} />
-      <BodegaStrip varietalCount={varietals.length} />
+      <BodegaStrip varietalCount={activeProductCount} />
       <NewsletterSection />
     </div>
   );
