@@ -1,6 +1,7 @@
 import { AgeGate } from "@/components/age-gate";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { WhatsappFloat } from "@/components/whatsapp-float";
 
 export default function SiteLayout({
   children,
@@ -20,6 +21,7 @@ export default function SiteLayout({
         {children}
       </main>
       <SiteFooter />
+      <WhatsappFloat />
     </AgeGate>
   );
 }

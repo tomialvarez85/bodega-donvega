@@ -1,8 +1,13 @@
 import Link from "next/link";
 
+import { FacebookIcon } from "@/components/facebook-icon";
+import { GmailIcon } from "@/components/gmail-icon";
 import { InstagramIcon } from "@/components/instagram-icon";
 import { LogoMark } from "@/components/logo-mark";
-import { CONTACT, instagramUrl } from "@/lib/site";
+import { TiktokIcon } from "@/components/tiktok-icon";
+import { WhatsappIcon } from "@/components/whatsapp-icon";
+import { CONTACT, facebookUrl, instagramUrl, tiktokUrl } from "@/lib/site";
+import { businessWhatsappUrl } from "@/lib/whatsapp";
 
 const FOOTER_LINKS = [
   { label: "Catálogo", href: "/catalogo" },
@@ -18,6 +23,10 @@ const footerLink =
   "inline-flex min-h-11 items-center text-[13px] text-line transition-colors duration-200 hover:text-gold motion-reduce:transition-none lg:min-h-0";
 
 export function SiteFooter() {
+  const whatsappUrl = businessWhatsappUrl(
+    "Hola Don Vega, quería hacerles una consulta.",
+  );
+
   return (
     <footer id="contacto" className="scroll-mt-20 border-t border-hairline bg-ink">
       <div className="mx-auto max-w-[1200px] px-6 pt-12 pb-10 sm:px-8">
@@ -57,26 +66,58 @@ export function SiteFooter() {
           <div>
             <p className={columnTitle}>Contacto</p>
             <div className="flex flex-col lg:gap-2.5">
-              <a href={`mailto:${CONTACT.email}`} className={footerLink}>
+              <a
+                href={`mailto:${CONTACT.email}`}
+                className={`${footerLink} inline-flex items-center gap-2.5`}
+              >
+                <GmailIcon />
                 {CONTACT.email}
               </a>
-              {CONTACT.phone && (
-                <span className="text-[13px] text-stone">{CONTACT.phone}</span>
+              {whatsappUrl && (
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${footerLink} inline-flex items-center gap-2.5`}
+                >
+                  <WhatsappIcon />
+                  {CONTACT.phone ?? "WhatsApp"}
+                </a>
               )}
             </div>
           </div>
 
           <div>
             <p className={columnTitle}>Redes</p>
-            <a
-              href={instagramUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${footerLink} inline-flex items-center gap-2.5`}
-            >
-              <InstagramIcon />
-              @{CONTACT.instagram}
-            </a>
+            <div className="flex flex-col lg:gap-2.5">
+              <a
+                href={instagramUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${footerLink} inline-flex items-center gap-2.5`}
+              >
+                <InstagramIcon />
+                @{CONTACT.instagram}
+              </a>
+              <a
+                href={facebookUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${footerLink} inline-flex items-center gap-2.5`}
+              >
+                <FacebookIcon />
+                {CONTACT.facebook}
+              </a>
+              <a
+                href={tiktokUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${footerLink} inline-flex items-center gap-2.5`}
+              >
+                <TiktokIcon />
+                @{CONTACT.tiktok}
+              </a>
+            </div>
           </div>
         </div>
 

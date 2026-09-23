@@ -18,9 +18,11 @@ export const SITE_DESCRIPTION =
 
 // Datos de contacto del footer. El teléfono se muestra recién cuando se completa.
 export const CONTACT = {
-  email: "hola@donvega.com.ar",
+  email: "ventasdonvega@gmail.com",
   instagram: "donvegabodega",
-  phone: null as string | null,
+  facebook: "Bodega Don Vega",
+  tiktok: "Bodega.don.vega",
+  phone: "+54 9 3513237728" as string | null,
 };
 
 // --- Ubicación y atención al público ---------------------------------------------------------
@@ -59,3 +61,10 @@ export const directionsUrl = (address: string) =>
   `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(mapQuery(address))}`;
 
 export const instagramUrl = () => `https://instagram.com/${CONTACT.instagram}`;
+
+// Slug de la página: sin espacios, tal como Facebook arma la URL por defecto.
+// TODO: si la bodega ya tiene una URL de Facebook propia, pegarla directamente acá.
+export const facebookUrl = () =>
+  `https://www.facebook.com/${CONTACT.facebook.replace(/\s+/g, "")}`;
+
+export const tiktokUrl = () => `https://www.tiktok.com/@${CONTACT.tiktok}`;

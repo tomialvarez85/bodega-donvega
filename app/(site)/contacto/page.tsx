@@ -1,9 +1,11 @@
 import { Mail, MessageCircle, Phone } from "lucide-react";
 import type { Metadata } from "next";
 
+import { FacebookIcon } from "@/components/facebook-icon";
 import { InstagramIcon } from "@/components/instagram-icon";
+import { TiktokIcon } from "@/components/tiktok-icon";
 import { UbicacionBodega } from "@/components/ubicacion-bodega";
-import { CONTACT, instagramUrl } from "@/lib/site";
+import { CONTACT, facebookUrl, instagramUrl, tiktokUrl } from "@/lib/site";
 import { businessWhatsappDisplay, businessWhatsappUrl } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
@@ -131,6 +133,46 @@ export default function ContactoPage() {
                   className={contactLink}
                 >
                   @{CONTACT.instagram}
+                  <span className="sr-only"> (se abre en una pestaña nueva)</span>
+                </a>
+              </dd>
+            </div>
+
+            <div className="flex flex-col gap-3 border-b-[0.5px] border-hairline p-6 sm:p-8">
+              <dt className={`${label} flex items-center gap-2`}>
+                <span className="text-gold">
+                  <FacebookIcon size={16} />
+                </span>
+                Facebook
+              </dt>
+              <dd>
+                <a
+                  href={facebookUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={contactLink}
+                >
+                  {CONTACT.facebook}
+                  <span className="sr-only"> (se abre en una pestaña nueva)</span>
+                </a>
+              </dd>
+            </div>
+
+            <div className="flex flex-col gap-3 border-b-[0.5px] border-hairline p-6 sm:p-8">
+              <dt className={`${label} flex items-center gap-2`}>
+                <span className="text-gold">
+                  <TiktokIcon size={16} />
+                </span>
+                TikTok
+              </dt>
+              <dd>
+                <a
+                  href={tiktokUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={contactLink}
+                >
+                  @{CONTACT.tiktok}
                   <span className="sr-only"> (se abre en una pestaña nueva)</span>
                 </a>
               </dd>
