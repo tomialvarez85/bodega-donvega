@@ -24,6 +24,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       // Vinos viejos de demo (seed anterior). Se puede quitar cuando ya no existan en la base.
       { protocol: "https", hostname: "picsum.photos" },
+      // Miniaturas de video de YouTube (components/youtube-embed.tsx).
+      { protocol: "https", hostname: "img.youtube.com" },
       ...supabaseImagePattern(),
     ],
   },

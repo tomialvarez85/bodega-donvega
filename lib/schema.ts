@@ -258,3 +258,19 @@ export const visitRequests = pgTable(
 export type VisitRequest = typeof visitRequests.$inferSelect;
 export type NewVisitRequest = typeof visitRequests.$inferInsert;
 export type { VisitRequestStatus };
+
+// Suscriptores del newsletter. Solo captura y guarda el email: no se manda ningún mail desde acá,
+// el dueño exporta la lista para usarla en la herramienta de email marketing que elija.
+export const newsletterSubscribers = pgTable("newsletter_subscribers", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  email: text("email").notNull().unique(),
+  subscribedAt: timestamp("subscribed_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  // No hay baja pública todavía: el campo queda listo para el día que se agregue (se desactiva
+  // el registro en vez de borrarlo, conservando el historial).
+  active: boolean("active").notNull().default(true),
+});
+
+export type NewsletterSubscriber = typeof newsletterSubscribers.$inferSelect;
+export type NewNewsletterSubscriber = typeof newsletterSubscribers.$inferInsert;

@@ -71,6 +71,13 @@
       "when": 1790003161938,
       "tag": "0009_create_visit_requests",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1790190523001,
+      "tag": "0010_create_newsletter_subscribers",
+      "breakpoints": true
     }
   ]
 }

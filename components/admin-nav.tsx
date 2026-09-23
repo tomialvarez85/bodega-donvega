@@ -4,6 +4,7 @@ import {
   Boxes,
   Compass,
   LayoutDashboard,
+  Mail,
   Package,
 } from "lucide-react";
 import Link from "next/link";
@@ -16,6 +17,7 @@ const ITEMS = [
   { label: "Productos", href: "/admin/productos", icon: Package },
   { label: "Combos", href: "/admin/combos", icon: Boxes },
   { label: "Visitas", href: "/admin/visitas", icon: Compass },
+  { label: "Newsletter", href: "/admin/newsletter", icon: Mail },
 ];
 
 export function AdminNav() {

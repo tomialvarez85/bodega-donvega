@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 import { requireAdmin } from "@/lib/auth/session";
 import { db } from "@/lib/db";
-import { combos, experiences, products } from "@/lib/schema";
+import { combos, experiences, newsletterSubscribers, products } from "@/lib/schema";
 import { isUuid } from "@/lib/validation/product";
 import {
   parsePrice,
@@ -211,4 +211,29 @@ export async function updateExperienceField(
   }
 
   return failed(BAD_REQUEST);
+}
+
+// ---------------------------------------------------------------------------------------------
+// Newsletter: solo el estado (activo/inactivo)
+// ---------------------------------------------------------------------------------------------
+
+export async function updateNewsletterSubscriberActive(
+  id: string,
+  active: boolean,
+): Promise<InlineResult<boolean>> {
+  if (!(await prepare(id))) return failed("Suscriptor inválido.");
+
+  try {
+    const updated = await db
+      .update(newsletterSubscribers)
+      .set({ active })
+      .where(eq(newsletterSubscribers.id, id))
+      .returning({ active: newsletterSubscribers.active });
+    if (updated.length === 0) return failed("Este suscriptor ya no existe.");
+    revalidatePath("/admin/newsletter");
+    return { ok: true, value: updated[0].active };
+  } catch (error) {
+    console.error("[admin] falló la edición en línea del suscriptor", error);
+    return failed("No se pudo guardar el cambio. Probá de nuevo.");
+  }
 }

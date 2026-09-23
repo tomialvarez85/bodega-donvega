@@ -20,16 +20,16 @@ export function Hero() {
         id="hero-title"
         className="mb-10 max-w-[680px] font-display text-[clamp(48px,8vw,80px)] leading-[1.05] font-light tracking-[-0.01em] text-cream"
       >
-        Vinos de carácter,
+        Vinos de altura,
         <br />
-        forjados en altura.
+        nacidos al pie de la cordillera.
       </h1>
 
       <p className="mb-12 max-w-[520px] text-base leading-[1.75] text-sand">
-        Nuestra bodega familiar lleva trabajando la tierra del Valle de
-        Tinogasta desde 1945. A 1.230 metros sobre el nivel del mar, el clima
-        extremo y los suelos áridos de Catamarca dan a cada uva un carácter que
-        no se puede imitar.
+        Más de 70 años de tradición familiar al pie de los Andes. Uvas
+        cultivadas a 1.230 msnm en Tinogasta, donde la amplitud térmica y el
+        sol catamarqueño concentran en cada grano lo que ningún otro suelo
+        puede dar.
       </p>
 
       <div className="flex flex-wrap justify-center gap-4">

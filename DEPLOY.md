@@ -29,7 +29,7 @@
 
    ```powershell
    $env:DATABASE_URL = "postgres://USUARIO:CLAVE@HOST/DB?sslmode=require"
-   npm run db:migrate     # aplica drizzle/0000 … 0009 (productos, pedidos, combos, ofertas, visitas)
+   npm run db:migrate     # aplica drizzle/0000 … 0010 (productos, pedidos, combos, ofertas, visitas, newsletter)
    npm run db:seed        # opcional: 5 vinos reales, precio 0 y stock 20 (se ajustan desde /admin)
    npm run db:seed-experiences   # opcional: 3 paquetes de visitas de ejemplo (contenido provisorio)
    Remove-Item Env:DATABASE_URL

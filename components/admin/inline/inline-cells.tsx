@@ -3,6 +3,7 @@
 import {
   updateComboField,
   updateExperienceField,
+  updateNewsletterSubscriberActive,
   updateProductField,
 } from "@/app/admin/(panel)/inline-actions";
 import { InlineNumberField } from "@/components/admin/inline/inline-number-field";
@@ -127,3 +128,22 @@ export function ExperienceActiveCell({ id, name, active }: { id: string; name: s
   );
 }
 
+// --- Newsletter ----------------------------------------------------------------------------
+
+export function NewsletterActiveCell({
+  id,
+  email,
+  active,
+}: {
+  id: string;
+  email: string;
+  active: boolean;
+}) {
+  return (
+    <InlineSwitch
+      checked={active}
+      label={`Activo: ${email}`}
+      save={async (value) => asFlag(await updateNewsletterSubscriberActive(id, value))}
+    />
+  );
+}

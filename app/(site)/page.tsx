@@ -1,6 +1,8 @@
 import { BodegaStrip } from "@/components/home/bodega-strip";
 import { FeaturedWines } from "@/components/home/featured-wines";
 import { Hero } from "@/components/home/hero";
+import { NewsletterSection } from "@/components/home/newsletter-section";
+import { VideoSection } from "@/components/home/video-section";
 import { getCatalogVarietals, getFeaturedProducts } from "@/lib/products";
 
 // Lee los vinos destacados de la base en cada visita (no se prerenderiza en el build).
@@ -19,8 +21,10 @@ export default async function Home() {
   return (
     <div className="bg-ink text-cream">
       <Hero />
+      <VideoSection />
       <FeaturedWines products={[...featured]} />
       <BodegaStrip varietalCount={varietals.length} />
+      <NewsletterSection />
     </div>
   );
 }
