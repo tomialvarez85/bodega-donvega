@@ -59,7 +59,7 @@ export function BodegaStrip({ varietalCount }: BodegaStripProps) {
 
           <dl className="flex flex-wrap justify-center gap-x-10 gap-y-6 lg:justify-start">
             {stats.map((stat) => (
-              <div key={stat.label} className="flex flex-col-reverse">
+              <div key={stat.label} className="flex flex-col-reverse items-center text-center lg:items-start lg:text-left">
                 <dt className="mt-1.5 text-[11px] tracking-[0.06em] text-stone uppercase">
                   {stat.label}
                 </dt>
